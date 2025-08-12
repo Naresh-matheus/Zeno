@@ -174,8 +174,46 @@ export default function Finance() {
   }, [userId.uuid, fetchData]);
 
   const onCategorySubmit = async (data) => {
+    console.log(userId.uuid)
+     try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/finance/addFinanceCategoria`,
+        {
+          userId: userId.uuid,
+          category: data.categoryName,
+        }
+      );
+      if (response.status === 200) {
+        console.log(response);
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Erro ao adicionar finança";
+      console.error("Erro ao adicionar finança:", errorMessage);
+    }
     console.log(data);
   };
+
+  async function ReadCategory(){
+     try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/finance/financeCategoria`,
+        {
+          uuid: userId.uuid,
+        }
+      );
+      if (response.status === 200) {
+        console.log(response);
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Erro ao ler categoria";
+      console.error("Erro ao ler categoria:", errorMessage);
+    }
+  };
+  useEffect(() => {
+    ReadCategory();
+  }, [userId.uuid]);
   const displayData = filteredData;
 
   const amountValue = displayData
